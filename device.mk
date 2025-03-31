@@ -100,7 +100,7 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.1-service.rc
 
 # Mtk plpath utils
-#PRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     mtk_plpath_utils \
     mtk_plpath_utils.recovery
 
