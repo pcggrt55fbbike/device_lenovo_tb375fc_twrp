@@ -1,3 +1,4 @@
+import /init.recovery.project.rc
 on init
     setprop sys.usb.configfs 1
     setprop sys.usb.controller "11201000.usb0"
