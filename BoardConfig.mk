@@ -24,8 +24,8 @@ TARGET_2ND_CPU_VARIANT := generic
 TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 
 # Power
-#ENABLE_CPUSETS := true
-#ENABLE_SCHEDBOOST := true
+ENABLE_CPUSETS := true
+ENABLE_SCHEDBOOST := true
 
 # Arch Suffix
 TARGET_IS_64_BIT := true
