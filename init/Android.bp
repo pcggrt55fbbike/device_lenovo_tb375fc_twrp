@@ -1,5 +1,5 @@
 cc_library_static {
-    name: "libinit_corot",
+    name: "libinit_tb375fc",
     header_libs: [
         "libbase_headers",
     ],
@@ -9,6 +9,6 @@ cc_library_static {
     static_libs: [
         "libbase",
     ],
-    srcs: ["init_corot.cpp"],
+    srcs: ["init_tb375fc.cpp"],
     recovery_available: true,
 }
