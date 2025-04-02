@@ -4,9 +4,6 @@ DEVICE_PATH := device/lenovo/tb375fc
 ALLOW_MISSING_DEPENDENCIES := true
 BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
-BUILD_BROKEN_PREBUILT_ELF_FILES := true
-BUILD_BROKEN_MISSING_REQUIRED_MODULES := true
-SOONG_ALLOW_MISSING_DEPENDENCIES := true
 
 # Architecture
 TARGET_ARCH := arm64
@@ -27,10 +24,6 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
-# Arch Suffix
-TARGET_IS_64_BIT := true
-TARGET_BOARD_SUFFIX := _64
-TARGET_USES_64_BIT_BINDER := true
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := tb375fc
@@ -61,7 +54,7 @@ BOARD_KERNEL_BASE := 0x3fff8000
 BOARD_RAMDISK_OFFSET := 0x26f08000
 BOARD_KERNEL_OFFSET := 0x00008000
 BOARD_TAGS_OFFSET := 0x07c88000
-BOARD_DTB_SIZE := 396043
+BOARD_DTB_SIZE := 410926
 BOARD_DTB_OFFSET := 0x07c88000
 BOARD_HEADER_SIZE := 2128
 
@@ -90,13 +83,7 @@ BOARD_SUPER_PARTITION_SIZE := 9126805504
 # Dynamic Partition
 BOARD_SUPER_PARTITION_GROUPS := main
 BOARD_MAIN_SIZE := 9122611200
-BOARD_MAIN_PARTITION_LIST := system \
-                             system_ext \
-                             vendor \
-                             product \
-                             odm \
-                             vendor_dlkm \
-                             odm_dlkm
+BOARD_MAIN_PARTITION_LIST := odm odm_dlkm product system system_ext vendor vendor_dlkm
 
 BOARD_PARTITION_LIST := $(call to-upper, $(BOARD_MAIN_PARTITION_LIST))
 $(foreach p, $(BOARD_PARTITION_LIST), $(eval BOARD_$(p)IMAGE_FILE_SYSTEM_TYPE := erofs))
@@ -104,12 +91,7 @@ $(foreach p, $(BOARD_PARTITION_LIST), $(eval TARGET_COPY_OUT_$(p) := $(call to-l
 
  # File System
 BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_ODM_DLKIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
@@ -129,7 +111,6 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 # System as root
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SUPPRESS_SECURE_ERASE := true
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 
 # Properties
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
@@ -159,15 +140,7 @@ TW_INCLUDE_LIBRESETPROP := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 
-# Excludes
-TW_EXCLUDE_APEX := true
-TW_EXCLUDE_PYTHON := true
-TW_EXCLUDE_NANO := true
-TW_EXCLUDE_TWRPAPP := true
-TW_EXCLUDE_TZDATA := true
-TW_EXCLUDE_BASH := true
-TW_EXCLUDE_LPTOOLS := true
-TW_EXCLUDE_LPDUMP := true
+
 
 # Debug-tools
 TWRP_INCLUDE_LOGCAT := true
@@ -197,7 +170,7 @@ TARGET_INIT_VENDOR_LIB := libinit_tb375fc
 TARGET_RECOVERY_DEVICE_MODULES := libinit_tb375fc
 
 # Maintainer/Version
-TW_DEVICE_VERSION := perilouspike/beta-1
+TW_DEVICE_VERSION := lenovo xiaoxin pad pro 2025 | luxwrty
 
 # Tools
 TW_INCLUDE_RESETPROP := true
