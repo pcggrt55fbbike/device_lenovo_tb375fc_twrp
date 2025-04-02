@@ -1,6 +1,6 @@
 # TWRP device tree for Lenovo xiaoxin pad pro 2025
 Lenovo xiaoxin pad pro 2025(codenamed _"tf375fc"_) 
-![corot]()
+![tf375fc]()
 ## Device specifications
 
 Basic   | Spec Sheet
