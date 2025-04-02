@@ -1,4 +1,4 @@
-# TWRP device tree for Redmi K60 Ultra
+# TWRP device tree for Lenovo xiaoxin pad pro 2025
 Lenovo xiaoxin pad pro 2025(codenamed _"tf375fc"_) 
 ![corot]()
 ## Device specifications
