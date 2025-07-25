@@ -14,7 +14,7 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: false
-        default: 'https://github.com/2426120557/tb375fc'
+        default: 'https://github.com/pcggrt55fbbike/device_lenovo_tb375fc_twrp'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: false
