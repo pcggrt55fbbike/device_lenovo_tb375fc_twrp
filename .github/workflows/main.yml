@@ -122,20 +122,15 @@ jobs:
         echo "📁 Confirming device tree folder:"
         ls -la device/lenovo/tb375fc || echo "device tree not found"
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-    
+
     - name: Add roomservice manifest
       run: |
         mkdir -p .repo/local_manifests
-        cat <<EOF > .repo/local_manifests/roomservice.xml
-        <manifest>
-        <project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp"
-           path="device/lenovo/tb375fc"
-           remote="github"
-           revision="newbuIld" />
-        </manifest>
-        EOF
+        echo '<manifest>' > .repo/local_manifests/roomservice.xml
+        echo '<project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp" path="device/lenovo/tb375fc" remote="origin" revision="newbuIld" />' >> .repo/local_manifests/roomservice.xml
+        echo '</manifest>' >> .repo/local_manifests/roomservice.xml
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-
+      
     - name: Show device tree structure
       run: |
         echo "📁 device/lenovo/tb375fc の構成確認:"
