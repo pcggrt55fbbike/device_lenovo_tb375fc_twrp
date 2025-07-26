@@ -1,34 +1,26 @@
-#
-# Copyright (C) 2024 The Android Open Source Project
-# Copyright (C) 2024 SebaUbuntu's TWRP device tree generator
-#
-# SPDX-License-Identifier: Apache-2.0
-#
+# device/lenovo/tb375fc/twrp_tb375fc.mk
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-
-# Inherit some common Omni stuff.
-$(call inherit-product, vendor/twrp/config/common.mk)
-
-# Inherit from tb375fc device
-$(call inherit-product, device/lenovo/tb375fc/device.mk)
-
-# Configure launch_with_vendor_ramdisk.mk
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
-
-# Configure emulated_storage.mk
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
-
-PRODUCT_DEVICE := tb375fc
+# 基本情報
 PRODUCT_NAME := twrp_tb375fc
+PRODUCT_DEVICE := tb375fc
 PRODUCT_BRAND := Lenovo
-PRODUCT_MODEL := TB375FC
+PRODUCT_MODEL := Lenovo TB-375FC
 PRODUCT_MANUFACTURER := Lenovo
 
-# Hide Reflash TWRP & FUSE passthrough
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.twrp.vendor_boot=true \
-    persist.sys.fuse.passthrough.enable=true
-    
+# TWRP共通設定を継承
+$(call inherit-product, vendor/twrp/config/common.mk)
+
+# 必要なパッケージ（例）
+PRODUCT_PACKAGES += \
+    libfstools \
+    recovery \
+    libtwrp_gui \
+    libtwcommon
+
+# fstab を recovery 用にコピー
+PRODUCT_COPY_FILES += \
+    device/lenovo/tb375fc/recovery/root/system/etc/recovery.fstab:etc/recovery.fstab
+
+# リカバリの起動イメージを上書き
+PRODUCT_COPY_FILES += \
+    device/lenovo/tb375fc/boot.img:boot.img
