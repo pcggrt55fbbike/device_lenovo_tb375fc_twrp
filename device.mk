@@ -1,6 +1,6 @@
 # device.mk for TB375FC with TB373FU ZUI ROM
 
-DEVICE_PATH := device_lenovo_tb375fc_twrp
+DEVICE_PATH := device/lenovo/tb375fc
 PRODUCT_DEVICE := tb375fc
 
 # SoC Platform
