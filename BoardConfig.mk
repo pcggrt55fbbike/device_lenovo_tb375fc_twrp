@@ -1,22 +1,15 @@
 # BoardConfig.mk for TB375FC with TB373FU ZUI ROM
+
 PRODUCT_DEVICE := tb375fc
 TARGET_BOOTLOADER_BOARD_NAME := tb375fc
 TARGET_NO_BOOTLOADER := true
 TARGET_BOARD_PLATFORM := mt6789
 
-# Kernel & DTB
-TARGET_PREBUILT_KERNEL := device/lenovo/tb375fc-kernel/Image.gz
-BOARD_KERNEL_IMAGE_NAME := Image.gz
-BOARD_KERNEL_CMDLINE := console=ttyMT0,115200n8 androidboot.hardware=tb375fc androidboot.selinux=permissive
-BOARD_KERNEL_BASE := 0x40000000
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-BOARD_RAMDISK_OFFSET := 0x04000000
+# DTB only — kernel removed
+BOARD_INCLUDE_DTB_IN_BOOTIMG := false
+BOARD_PREBUILT_DTB := device/lenovo/tb375fc/prebuilt/dtb.img
 
-# DTB from tb373fu
-BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_PREBUILT_DTB := device/lenovo/tb373fu-kernel/dtb.img
-
-# vendor_boot settings
+# Vendor_boot configuration
 BOARD_VENDOR_RAMDISK_RECOVERY := true
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
