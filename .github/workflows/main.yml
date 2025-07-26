@@ -18,7 +18,7 @@ on:
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: false
-        default: 'main'
+        default: 'newbuIld'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: false
