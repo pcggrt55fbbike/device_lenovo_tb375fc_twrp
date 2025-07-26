@@ -1,8 +1,11 @@
-# device/lenovo/tb375fc/recovery/root/system/etc/recovery.fstab
+# recovery.fstab for TB375FC with TB373FU ZUI ROM
 
-/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/boot  /boot   emmc  defaults
-/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system /system emmc  defaults
-/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/cache  /cache  emmc  defaults
-/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/userdata /data emmc defaults
-/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/recovery /recovery emmc defaults
-tmpfs  /tmp    tmpfs  nosuid,nodev,mode=0755
+/dev/block/bootdevice/by-name/system     /system         ext4    ro,barrier=1                                      wait
+/dev/block/bootdevice/by-name/vendor     /vendor         ext4    ro,barrier=1                                      wait
+/dev/block/bootdevice/by-name/product    /product        ext4    ro,barrier=1                                      wait
+/dev/block/bootdevice/by-name/data       /data           f2fs    noatime,nosuid,nodev                             wait,check,encryptable=footer
+/dev/block/bootdevice/by-name/metadata   /metadata       ext4    noatime                                          wait
+/dev/block/bootdevice/by-name/cache      /cache          ext4    noatime,nosuid,nodev                             wait
+/dev/block/bootdevice/by-name/misc       /misc           emmc    defaults                                          defaults
+/dev/block/bootdevice/by-name/persist    /persist        ext4    defaults                                          defaults
+/dev/block/bootdevice/by-name/modem      /modem          ext4    defaults                                          defaults
