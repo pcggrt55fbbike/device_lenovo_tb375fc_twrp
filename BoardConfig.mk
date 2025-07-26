@@ -1,25 +1,32 @@
-# device/lenovo/tb375fc/BoardConfig.mk
+# BoardConfig.mk for TB375FC with TB373FU ZUI ROM
 
-LOCAL_PATH := $(call my-dir)
+TARGET_BOOTLOADER_BOARD_NAME := tb375fc
+TARGET_NO_BOOTLOADER := true
+TARGET_BOARD_PLATFORM := mt6789
 
-# カーネル起動パラメータ
-BOARD_KERNEL_CMDLINE := \
-    androidboot.hardware=tb375fc \
-    console=ttyMSM0,115200n8
+# Kernel & DTB
+TARGET_PREBUILT_KERNEL := device/lenovo/tb375fc-kernel/Image.gz
+BOARD_KERNEL_IMAGE_NAME := Image.gz
+BOARD_KERNEL_CMDLINE := console=ttyMT0,115200n8 androidboot.hardware=tb375fc androidboot.selinux=permissive
+BOARD_KERNEL_BASE := 0x40000000
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+BOARD_RAMDISK_OFFSET := 0x04000000
 
-# DTBO（Device Tree Blob Overlay）
-BOARD_DTBOIMAGE_PARTITION := dtbo
-BOARD_DTBOIMAGE_FILE      := dtbo.img
+# DTB from tb373fu
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_PREBUILT_DTB := device/lenovo/tb373fu-kernel/dtb.img
 
-# リカバリ用パーティション
-BOARD_RECOVERYIMAGE_PARTITION := recovery
+# vendor_boot settings
+BOARD_VENDOR_RAMDISK_RECOVERY := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
 
-# vendor_boot 用設定
-BOARD_VENDORBOOTIMAGE_PARTITION := vendor_boot
-BOARD_VENDORBOOTIMAGE_FILE      := vendor_boot.img
+# File systems
+BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
+BOARD_VENDORIMAGE_PARTITION_TYPE := ext4
+BOARD_USERDATAIMAGE_PARTITION_TYPE := f2fs
 
-# AVB を無効化
-BOARD_AVB_ENABLE := false
-
-# SELinuxポリシーは vendor 側を使う
-RECOVERY_VENDOR_SEPOLICY := true
+# Encryption support
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
