@@ -1,5 +1,5 @@
 # twrp_tb375fc.mk for TB375FC using TB373FU ROM
-
+PRODUCT_NAME := twrp_tb375fc
 DEVICE_PATH := device/lenovo/tb375fc
 
 # Assert bypass — accept both device names
