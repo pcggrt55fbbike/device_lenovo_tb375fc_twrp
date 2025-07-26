@@ -31,7 +31,7 @@ PRODUCT_MANUFACTURER := Lenovo
 # Assert bypass — accept both device names
 PRODUCT_OTA_ASSERT_DEVICE := tb373fu,tb375fc
 
-# TWRP UI & Features
+# TWRP UI & Feature flags
 TW_THEME := portrait_hdpi
 TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_CRYPTO := true
@@ -44,20 +44,19 @@ TW_INPUT_BLACKLIST := "hbtp_vm"
 
 # Recovery behavior
 RECOVERY_VARIANT := twrp
-TW_TARGET_USES_QCOM_BSP := false
 TW_DEVICE_VERSION := TB375FC-on-ZUI-16.0
+TW_TARGET_USES_QCOM_BSP := false
 RECOVERY_SDCARD_ON_DATA := true
 
 # Partition definitions
 BOARD_VENDOR_BOOTIMAGE_PARTITION := vendor_boot
 BOARD_RECOVERYIMAGE_PARTITION := vendor_boot
 
-# Prebuilt kernel and DTB
+# Prebuilt DTB — kernel removed
 DEVICE_PATH := device/lenovo/tb375fc
-BOARD_PREBUILT_KERNEL := $(DEVICE_PATH)/kernel/Image.gz
 BOARD_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb/dtb.img
 
-# System properties
+# System properties for TWRP
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.twrp.vendor_boot=true \
     persist.sys.fuse.passthrough.enable=true
