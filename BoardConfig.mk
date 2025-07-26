@@ -12,8 +12,9 @@ TARGET_NO_BOOTLOADER := true
 TARGET_BOARD_PLATFORM := mt6789
 
 # DTB only — kernel removed
+DEVICE_PATH := device/lenovo/tb375fc
 BOARD_INCLUDE_DTB_IN_BOOTIMG := false
-BOARD_PREBUILT_DTB := device_lenovo_tb375fc_twrp/prebuilt/dtb
+BOARD_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
 
 # Vendor_boot configuration
 BOARD_VENDOR_RAMDISK_RECOVERY := true
