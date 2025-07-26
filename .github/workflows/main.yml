@@ -22,7 +22,7 @@ on:
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: false
-        default: 'device_lenovo_tb375fc_twrp'
+        default: 'device/lenovo/tb375fc'
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL'
         required: false
