@@ -1,6 +1,6 @@
 # device.mk for TB375FC with TB373FU ZUI ROM
 
-DEVICE_PATH := device/lenovo/tb375fc
+DEVICE_PATH := device_lenovo_tb375fc_twrp
 PRODUCT_DEVICE := tb375fc
 
 # SoC Platform
@@ -21,7 +21,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.locale=ja-JP
 
 # Only include DTB (no kernel)
-BOARD_PREBUILT_DTB := $(DEVICE_PATH)/dtb.img
+BOARD_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
 
 # Recovery configuration (vendor_boot integration)
 BOARD_VENDOR_RAMDISK_RECOVERY := true
