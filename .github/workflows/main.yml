@@ -114,6 +114,14 @@ jobs:
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
+    - name: Add roomservice manifest
+      run: |
+        mkdir -p .repo/local_manifests
+        echo '<manifest>' > .repo/local_manifests/roomservice.xml
+        echo '<project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp" path="device/lenovo/tb375fc" remote="origin" revision="newbuIld" />' >> .repo/local_manifests/roomservice.xml
+        echo '</manifest>' >> .repo/local_manifests/roomservice.xml
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+    
     - name: Debug roomservice.xml
       run: |
         echo "📄 roomservice.xml content:"
@@ -123,14 +131,6 @@ jobs:
         ls -la device/lenovo/tb375fc || echo "device tree not found"
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
-    - name: Add roomservice manifest
-      run: |
-        mkdir -p .repo/local_manifests
-        echo '<manifest>' > .repo/local_manifests/roomservice.xml
-        echo '<project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp" path="device/lenovo/tb375fc" remote="origin" revision="newbuIld" />' >> .repo/local_manifests/roomservice.xml
-        echo '</manifest>' >> .repo/local_manifests/roomservice.xml
-      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-      
     - name: Show device tree structure
       run: |
         echo "📁 device/lenovo/tb375fc の構成確認:"
