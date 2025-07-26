@@ -1,25 +1,45 @@
-# .github/workflows/main.yml
 name: Recovery Build
+
 on:
   workflow_dispatch:
     inputs:
       MANIFEST_URL:
+        description: 'MANIFEST_URL'
+        required: false
         default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
       MANIFEST_BRANCH:
+        description: 'MANIFEST_BRANCH'
+        required: false
         default: 'twrp-12.1'
       DEVICE_TREE_URL:
+        description: 'DEVICE_TREE_URL'
+        required: false
         default: 'https://github.com/pcggrt55fbbike/device_lenovo_tb375fc_twrp'
       DEVICE_TREE_BRANCH:
+        description: 'DEVICE_TREE_BRANCH'
+        required: false
         default: 'newbuIld'
       DEVICE_PATH:
+        description: 'DEVICE_PATH'
+        required: false
         default: 'device/lenovo/tb375fc'
       COMMON_TREE_URL:
+        description: 'COMMON_TREE_URL'
+        required: false
       COMMON_PATH:
+        description: 'COMMON_PATH'
+        required: false
       DEVICE_NAME:
+        description: 'DEVICE_NAME'
+        required: false
         default: 'tb375fc'
       MAKEFILE_NAME:
+        description: 'MAKEFILE_NAME'
+        required: false
         default: 'twrp_tb375fc'
       BUILD_TARGET:
+        description: 'BUILD_TARGET'
+        required: false
         default: 'vendorboot'
 
 jobs:
@@ -31,59 +51,67 @@ jobs:
     steps:
     - name: Display Run Parameters
       run: |
-        echo "🌐 Manifest: ${{ github.event.inputs.MANIFEST_URL }} [${{ github.event.inputs.MANIFEST_BRANCH }}]"
-        echo "📦 Device Tree: ${{ github.event.inputs.DEVICE_TREE_URL }} [${{ github.event.inputs.DEVICE_TREE_BRANCH }}]"
-        echo "📁 Path: ${{ github.event.inputs.DEVICE_PATH }}"
-        echo "📱 Device: ${{ github.event.inputs.DEVICE_NAME }} (${{
-          github.event.inputs.MAKEFILE_NAME }}) ➜ Build target: ${{ github.event.inputs.BUILD_TARGET }}.img"
+        echo "::group::User Environment Variables"
+        echo "Manifest URL: ${{ github.event.inputs.MANIFEST_URL }}"
+        echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
+        echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
+        echo "Device Tree Branch: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
+        echo "Device Path: ${{ github.event.inputs.DEVICE_PATH }}"
+        echo "Device Name: ${{ github.event.inputs.DEVICE_NAME }}"
+        echo "Makefile Name: ${{ github.event.inputs.MAKEFILE_NAME }}"
+        echo "Build Target: ${{ github.event.inputs.BUILD_TARGET }}.img"
+        echo "::endgroup::"
 
-    - name: Checkout Repository
+    - name: Check Out
       uses: actions/checkout@v3
 
     - name: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
 
-    - name: Install Dependencies
+    - name: Prepare the environment
       run: |
-        sudo apt update && sudo apt -y upgrade
-        sudo apt install -y \
-          gperf gcc-12 g++-12 g++-12-multilib gcc-12-multilib libc6-dev \
-          libncurses5-dev libx11-dev tree lib32z-dev libgl1-mesa-dev \
-          libxml2-utils xsltproc bc ccache lib32readline-dev liblz4-tool \
-          libsdl1.2-dev libwxgtk3.2-dev lzop pngcrush schedtool squashfs-tools \
-          imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-12-dev python3
+        sudo apt update
+        sudo apt -y upgrade
+        sudo apt -y install gperf gcc-12 g++-12 g++-12-multilib gcc-12-multilib libc6-dev libncurses5-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev liblz4-tool libsdl1.2-dev libwxgtk3.2-dev libxml2 lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-12-dev python3
 
-    - name: Setup Java 8
+    - name: Install OpenJDK
       uses: actions/setup-java@v3
       with:
-        distribution: zulu
-        java-version: 8
+        distribution: 'zulu'
+        java-version: '8'
 
-    - name: Install repo tool
+    - name: Setup SSH Keys
+      if: ${{ startsWith(github.event.inputs.MANIFEST_URL, 'git@github.com') }}
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: |
+          ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Install repo
       run: |
         mkdir ~/bin
-        curl -o ~/bin/repo https://storage.googleapis.com/git-repo-downloads/repo
-        chmod +x ~/bin/repo
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
 
     - name: Initialize repo
       run: |
-        mkdir workspace && cd workspace
+        mkdir workspace
+        cd workspace
         echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
-        git config --global user.name "CopilotBot"
-        git config --global user.email "copilot@example.com"
+        git config --global user.name "YourUsername"
+        git config --global user.email "you@example.com"
         repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
       id: pwd
 
     - name: Repo Sync
-      run: repo sync -j$(nproc --all) --force-sync
+      run: |
+        repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
 
-    - name: Clone Device Tree
+    - name: Clone device tree
       run: |
-        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} \
-          -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} \
-          ./${{ github.event.inputs.DEVICE_PATH }}
+        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Add roomservice manifest
@@ -99,20 +127,21 @@ jobs:
 EOF
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
-    - name: Show Device Tree Structure
-      run: tree ${{ github.event.inputs.DEVICE_PATH }} || ls -R ${{ github.event.inputs.DEVICE_PATH }}
-      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-
-    - name: Clone Common Tree
-      if: |
-        github.event.inputs.COMMON_TREE_URL != null && github.event.inputs.COMMON_PATH != null
+    - name: Show device tree structure
       run: |
-        git clone ${{ github.event.inputs.COMMON_TREE_URL }} \
-          -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} \
-          ./${{ github.event.inputs.COMMON_PATH }}
+        echo "📁 device/lenovo/tb375fc の構成確認:"
+        tree device/lenovo/tb375fc || ls -R device/lenovo/tb375fc
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
-    - name: Detect Build Tree Type
+    - name: Clone common tree
+      if: |
+        github.event.inputs.COMMON_TREE_URL != null
+        && github.event.inputs.COMMON_PATH != null
+      run: |
+        git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
+    - name: Check Build Tree
       uses: haya14busa/action-cond@v1
       id: buildtree
       with:
@@ -122,22 +151,23 @@ EOF
 
     - name: Sync Device Dependencies
       run: |
-        bash ${GITHUB_WORKSPACE}/scripts/convert.sh \
-          ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies || true
+        bash ${GITHUB_WORKSPACE}/scripts/convert.sh ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
         repo sync -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      continue-on-error: true
 
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
       with:
         swap-size-gb: 12
 
-    - name: Build Recovery
+    - name: Building recovery
       run: |
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         if ! lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng; then
-          echo "❌ lunch failed: combo not found: ${{ github.event.inputs.MAKEFILE_NAME }}-eng"
+          echo "❌ lunch failed: ${{ github.event.inputs.MAKEFILE_NAME }}-eng が見つかりません"
+          echo "🔍 利用可能な lunch combos:"
           lunch
           exit 1
         fi
@@ -145,16 +175,16 @@ EOF
         make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
-    - name: Upload Artifact
+    - name: Upload to Release
       uses: softprops/action-gh-release@v1
       with:
         files: workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/vendor_boot.img
         name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
         tag_name: ${{ github.run_id }}
         body: |
-          🌿 Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
-          📱 Device: ${{ github.event.inputs.DEVICE_NAME }}
-          🎯 Target: vendor_boot.img
-          📦 Version: Android14
+          Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
+          Device: ${{ github.event.inputs.DEVICE_NAME }}
+          Target: vendor_boot.img
+          Version: Android14
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
