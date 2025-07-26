@@ -55,7 +55,7 @@ BOARD_RECOVERYIMAGE_PARTITION := vendor_boot
 # Prebuilt kernel and DTB
 DEVICE_PATH := device/lenovo/tb375fc
 BOARD_PREBUILT_KERNEL := $(DEVICE_PATH)/kernel/Image.gz
-BOARD_PREBUILT_DTB := $(DEVICE_PATH)/dtb.img
+BOARD_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb/dtb.img
 
 # System properties
 PRODUCT_PROPERTY_OVERRIDES += \
