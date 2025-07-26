@@ -146,7 +146,17 @@ jobs:
       run: |
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
-        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+
+        # lunch失敗時はコンボ一覧表示して終了
+        if ! lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng; then
+          echo "❌ lunch failed: ${{ github.event.inputs.MAKEFILE_NAME }}-eng が見つかりません"
+          echo "🔍 利用可能な lunch combos:"
+          lunch
+          exit 1
+        fi
+
+        make clean
+        make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Upload to Release
