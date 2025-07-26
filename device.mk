@@ -1,27 +1,41 @@
-# device/lenovo/tb375fc/device.mk
+# device.mk for TB375FC with TB373FU ZUI ROM
 
-LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
+DEVICE_PATH := device/lenovo/tb375fc
 
-# ROM／デバイス識別
-PRODUCT_DEVICE := tb375fc
-PRODUCT_MODEL  := TB-375FC
-PRODUCT_BRAND  := lenovo
-PRODUCT_MANUFACTURER := lenovo
+# SoC Platform
+TARGET_BOARD_PLATFORM := mt6789
 
-# カーネル／DTB の配置ディレクトリ
-PRODUCT_BOOTIMAGE_KERNEL := kernel
-PRODUCT_BOOTIMAGE_DTB    := dtb/$(TARGET_DEVICE).dtb
+# System properties for ROM compatibility
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.product.device=tb373fu \
+    ro.build.product=tb373fu \
+    ro.product.model=Lenovo TB375FC \
+    ro.product.name=ZUI_16_TB373FU \
+    ro.build.fingerprint=lenovo/ZUI_16_TB373FU/ZUI:13/SP1A.210812.003/230124:user/release-keys
 
-# TWRP リカバリを有効化
-RECOVERY_VARIANTS := twrp
+# Add custom props to avoid build errors
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp \
+    persist.vendor.radio.multisim.config=dsds \
+    persist.sys.locale=ja-JP
 
-# リカバリの fstab をコピー
-PRODUCT_COPY_FILES += \
-    $(LOCAL_DIR)/recovery.fstab:recovery.fstab
+# Include kernel and DTB
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/kernel/Image.gz
+BOARD_PREBUILT_DTB := $(DEVICE_PATH)/dtb.img
 
-# vendor_boot をビルド
-inherit_vendor_bootimage := true
+# Recovery
+BOARD_VENDOR_RAMDISK_RECOVERY := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 
-# TWRP ベース定義
-$(call inherit-product, $(SRC_TARGET_DIR)/product/twrp_base.mk)
+# TWRP Features
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_NO_USB_STORAGE := false
+TW_INPUT_BLACKLIST := "hbtp_vm"
+
+# File systems
+BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
+BOARD_VENDORIMAGE_PARTITION_TYPE := ext4
+BOARD_USERDATAIMAGE_PARTITION_TYPE := f2fs
