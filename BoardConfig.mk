@@ -1,4 +1,11 @@
 # BoardConfig.mk for TB375FC with TB373FU ZUI ROM
+
+# Architecture definitions
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_VARIANT := generic
+
+# Platform and bootloader
 TARGET_BOOTLOADER_BOARD_NAME := tb375fc
 TARGET_NO_BOOTLOADER := true
 TARGET_BOARD_PLATFORM := mt6789
