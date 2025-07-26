@@ -13,7 +13,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, vendor/twrp/config/common.mk)
 
 # Inherit from tb375fc device tree
-$(call inherit-product, device_lenovo_tb375fc_twrp/device.mk)
+$(call inherit-product, device/lenovo/tb375fc/device.mk)
 
 # Configure launch_with_vendor_ramdisk.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
@@ -53,7 +53,7 @@ BOARD_VENDOR_BOOTIMAGE_PARTITION := vendor_boot
 BOARD_RECOVERYIMAGE_PARTITION := vendor_boot
 
 # Prebuilt DTB — kernel removed
-DEVICE PATH := device_lenovo_tb375fc_twrp
+DEVICE_PATH := device/lenovo/tb375fc
 BOARD_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
 
 # System properties for TWRP
