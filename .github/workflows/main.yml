@@ -113,7 +113,13 @@ jobs:
       run: |
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-
+      
+    - name: Show device tree structure
+      run: |
+        echo "📁 device/lenovo/tb375fc の構成確認:"
+        tree device/lenovo/tb375fc || ls -R device/lenovo/tb375fc
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+    
     - name: Clone common tree
       if: |
         github.event.inputs.COMMON_TREE_URL != null
