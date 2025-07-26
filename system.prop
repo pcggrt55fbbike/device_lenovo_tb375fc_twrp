@@ -1,17 +1,25 @@
-# Dynamic Partitions
-ro.boot.dynamic_partitions=true
+# system.prop for TB375FC using TB373FU ZUI ROM
 
-# Fstab
-ro.postinstall.fstab.prefix=/system
+# Basic identity (ROM寄せ)
+ro.product.device=tb373fu
+ro.build.product=tb373fu
+ro.product.model=Lenovo TB375FC
+ro.product.brand=Lenovo
+ro.product.name=ZUI_16_TB373FU
 
-# USB MTP
-ro.sys.usb.storage.type=mtp
+# ZUI compatibility
+ro.zui.build.version=16.0.099
+ro.zui.device.code=tb373fu
+ro.zui.product.platform=mt6789
 
-# Misc
-ro.vendor.mediatek.platform=MT6897
+# TWRP behavior tuning
+ro.twrp.vendor_boot=true
+ro.twrp.fbe.decrypt=true
+ro.twrp.statusbar.height=54
+ro.twrp.ui.language=ja
 
-# Timezone
-persist.sys.timezone="Asia/Shanghai"
-
-# Crypto
-ro.crypto.volume.filenames_mode=aes-256-cts
+# Performance & debug
+persist.sys.usb.config=mtp
+persist.sys.locale=ja-JP
+persist.sys.usb.debug=1
+persist.vendor.radio.multisim.config=dsds
