@@ -4,6 +4,7 @@
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_VARIANT := generic
+TARGET_CPU_ABI := arm64-v8a
 
 # Platform and bootloader
 TARGET_BOOTLOADER_BOARD_NAME := tb375fc
