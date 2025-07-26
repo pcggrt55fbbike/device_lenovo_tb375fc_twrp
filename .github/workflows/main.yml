@@ -118,13 +118,13 @@ jobs:
       run: |
         mkdir -p .repo/local_manifests
         cat <<EOF > .repo/local_manifests/roomservice.xml
-<manifest>
-  <project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp"
+        <manifest>
+        <project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp"
            path="device/lenovo/tb375fc"
            remote="github"
            revision="newbuIld" />
-</manifest>
-EOF
+        </manifest>
+        EOF
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Show device tree structure
