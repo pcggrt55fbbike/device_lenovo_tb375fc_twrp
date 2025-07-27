@@ -94,11 +94,6 @@ jobs:
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
 
-    - name: Clean previous .repo folder
-      run: |
-        rm -rf .repo || true
-      working-directory: workspace
-
     - name: Initialize repo
       run: |
         mkdir workspace
