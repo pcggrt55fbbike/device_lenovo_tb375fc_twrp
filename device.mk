@@ -1,5 +1,6 @@
 # device.mk for TB375FC with TB373FU ZUI ROM
-
+# device.mk に追加すると combo認識がより堅牢に
+PRODUCT_NAME := twrp_tb375fc
 DEVICE_PATH := device/lenovo/tb375fc
 PRODUCT_DEVICE := tb375fc
 
