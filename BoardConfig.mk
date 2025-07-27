@@ -2,6 +2,12 @@
 
 # ----------------------------------------
 # Device path
+# fallback: enforce vendor boot build in all contexts
+BOARD_BUILD_VENDOR_BOOT_IMAGE := true
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+BOARD_VENDOR_RAMDISK_RECOVERY := true
+
 DEVICE_PATH := device/lenovo/tb375fc
 
 # ----------------------------------------
