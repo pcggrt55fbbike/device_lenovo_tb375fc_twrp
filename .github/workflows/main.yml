@@ -168,8 +168,10 @@ jobs:
 
     - name: Building recovery
       run: |
-        source build/envsetup.sh
+        export BUILD_TARGET=${{ github.event.inputs.BUILD_TARGET }}image
+        export MAKECMDGOALS=${{ github.event.inputs.BUILD_TARGET }}image
         export ALLOW_MISSING_DEPENDENCIES=true
+        source build/envsetup.sh
         if ! lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng; then
           echo "❌ lunch failed: ${{ github.event.inputs.MAKEFILE_NAME }}-eng が見つかりません"
           echo "🔍 利用可能な lunch combos:"
@@ -177,7 +179,7 @@ jobs:
           exit 1
         fi
         make clean
-        make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        make $BUILD_TARGET -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Upload to Release
