@@ -103,7 +103,16 @@ jobs:
         git config --global user.email "you@example.com"
         repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
       id: pwd
-
+      
+    - name: Add roomservice manifest
+      run: |
+       mkdir -p .repo/local_manifests
+       echo '<manifest>' > .repo/local_manifests/roomservice.xml
+       echo '  <remote name="github" fetch="https://github.com/" />' >> .repo/local_manifests/roomservice.xml
+       echo '  <project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp" path="device/lenovo/tb375fc" remote="github" revision="newbuIld" />' >> .repo/local_manifests/roomservice.xml
+       echo '</manifest>' >> .repo/local_manifests/roomservice.xml
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+    
     - name: Repo Sync
       run: |
         repo sync -j$(nproc --all) --force-sync
@@ -113,15 +122,6 @@ jobs:
     #  run: |
     #    git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
     #  working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-
-    - name: Add roomservice manifest
-      run: |
-        mkdir -p .repo/local_manifests
-        echo '<manifest>' > .repo/local_manifests/roomservice.xml
-        echo '<remote name="github" fetch="https://github.com/" />' >> .repo/local_manifests/roomservice.xml
-        echo '<project name="pcggrt55fbbike/device_lenovo_tb375fc_twrp" path="device/lenovo/tb375fc" remote="github" revision="newbuIld" />' >> .repo/local_manifests/roomservice.xml
-        echo '</manifest>' >> .repo/local_manifests/roomservice.xml
-      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
     
     - name: Debug roomservice.xml
       run: |
