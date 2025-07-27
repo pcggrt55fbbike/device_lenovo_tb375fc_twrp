@@ -1,42 +1,140 @@
-# device.mk for TB375FC with TB373FU ZUI ROM
-# device.mk に追加すると combo認識がより堅牢に
-PRODUCT_NAME := twrp_tb375fc
-DEVICE_PATH := device/lenovo/tb375fc
-PRODUCT_DEVICE := tb375fc
+#
+# Copyright (C) 2024 The Android Open Source Project
+# Copyright (C) 2024 SebaUbuntu's TWRP device tree generator
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 
-# SoC Platform
-TARGET_BOARD_PLATFORM := mt6789
+LOCAL_PATH := device/lenovo/tb375fc
 
-# System properties for ROM compatibility
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.product.device=tb373fu \
-    ro.build.product=tb373fu \
-    ro.product.model=Lenovo TB375FC \
-    ro.product.name=ZUI_16_TB373FU \
-    ro.build.fingerprint=lenovo/ZUI_16_TB373FU/ZUI:13/SP1A.210812.003/230124:user/release-keys
+# Hidl Service
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
 
-# Custom properties to avoid build errors
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp \
-    persist.vendor.radio.multisim.config=dsds \
-    persist.sys.locale=ja-JP
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH) 
 
-# Only include DTB (no kernel)
-BOARD_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
+# Dynamic
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# Recovery configuration (vendor_boot integration)
-BOARD_VENDOR_RAMDISK_RECOVERY := true
-BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+# API
+PRODUCT_SHIPPING_API_LEVEL := 31
+PRODUCT_TARGET_VNDK_VERSION := 34
 
-# TWRP Features
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_FBE := true
-TW_INCLUDE_FBE_METADATA_DECRYPT := true
-TW_SCREEN_BLANK_ON_BOOT := true
-TW_NO_USB_STORAGE := false
-TW_INPUT_BLACKLIST := "hbtp_vm"
+# A/B
+AB_OTA_UPDATER := true
+ENABLE_VIRTUAL_AB := true
+TARGET_ENFORCE_AB_OTA_PARTITION_LIST := true
+AB_OTA_PARTITIONS += \
+    apusys \
+    audio_dsp \
+    boot \
+    ccu \
+    dpm \
+    dtbo \
+    gpueb \
+    gz \
+    lk \
+    logo \
+    mcf_ota \
+    mcupm \
+    md1img \
+    mvpu_algo \
+    odm \
+    odm_dlkm \
+    pi_img \
+    preloader_raw \
+    product \
+    scp \
+    spmfw \
+    sspm \
+    system \
+    system_ext \
+    system_dlkm \
+    vbmeta \
+    vbmeta_system \
+    vbmeta_vendor \
+    vcp \
+    vendor \
+    vendor_boot \
+    vendor_dlkm 
 
-# File system types
-BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
-BOARD_VENDORIMAGE_PARTITION_TYPE := ext4
-BOARD_USERDATAIMAGE_PARTITION_TYPE := f2fs
+# A/B
+AB_OTA_POSTINSTALL_CONFIG += \
+    RUN_POSTINSTALL_system=true \
+    POSTINSTALL_PATH_system=system/bin/mtk_plpath_utils \
+    FILESYSTEM_TYPE_system=erofs \
+    POSTINSTALL_OPTIONAL_system=true
+
+# Boot control HAL
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2-mtkimpl \
+    android.hardware.boot@1.2-mtkimpl.recovery \
+    bootctrl.mt6897.recovery
+
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2- \
+    android.hardware.boot@1.2-impl.recovery \
+    android.hardware.boot@1.2-service    
+
+PRODUCT_PACKAGES := \
+    bootctrl.mt6897 \
+    libgptutils \
+    libz \
+    libcutils \
+
+PRODUCT_PACKAGES += \
+    otapreopt_script \
+    cppreopts.sh \
+    update_engine \
+    update_verifier \
+    update_engine_sideload \
+    checkpoint_gc
+
+# Health
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.1-impl \
+    android.hardware.health@2.1-service \
+    android.hardware.health@2.1-impl.recovery \
+    android.hardware.health@2.1-service.rc
+
+# Mtk plpath utils
+PRODUCT_PACKAGES += \
+    mtk_plpath_utils \
+    mtk_plpath_utils.recovery
+
+# Keymaster
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@4.1
+
+# Keymint
+PRODUCT_PACKAGES += \
+    android.hardware.security.keymint \
+    android.hardware.security.secureclock \
+    android.hardware.security.sharedsecret
+
+# Keystore2
+PRODUCT_PACKAGES += \
+    android.system.keystore2
+
+# Drm
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.4    
+
+# Additional Target Libraries
+TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hardware.keymaster@4.1 \
+    android.hardware.vibrator-V1-ndk_platform \
+    android.hardware.graphics.common@1.0 \
+    libion \
+    libxml2 \
+    android.hardware.health@2.0-impl-default \
+    android.hardware.boot@1.0
+
+TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.1.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.vibrator-V1-ndk_platform.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.graphics.common@1.0.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.health@2.0-impl-default.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.boot@1.0.so
