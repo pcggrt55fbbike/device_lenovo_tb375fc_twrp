@@ -18,7 +18,7 @@ on:
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: false
-        default: 'main'
+        default: 'okbuild'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: false
@@ -113,6 +113,24 @@ jobs:
       run: |
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
+    - name: Apply Crypto & Hardware Patches
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      run: |
+        cd ${{ github.event.inputs.DEVICE_PATH }}
+        echo 'TW_INCLUDE_CRYPTO := false' >> BoardConfig.mk
+        echo 'TW_INCLUDE_FBE := false' >> BoardConfig.mk
+        echo 'TW_INCLUDE_FBE_METADATA_DECRYPT := false' >> BoardConfig.mk
+        echo 'ro.hardware=tb375fc' >> system.prop
+
+    - name: Verify Patches
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      run: |
+        cd ${{ github.event.inputs.DEVICE_PATH }}
+        echo '--- BoardConfig.mk (last 5 lines) ---'
+        tail -n 5 BoardConfig.mk
+        echo '--- system.prop (last 5 lines) ---'
+        tail -n 5 system.prop
 
     - name: Clone common tree
       if: |
