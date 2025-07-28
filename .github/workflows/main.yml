@@ -41,6 +41,10 @@ on:
         description: 'BUILD_TARGET'
         required: false
         default: 'vendorboot'
+      DISABLE_CRYPTO:
+        description: 'Disable /data decryption? true or false'
+        required: false
+        default: 'true'
 
 jobs:
   build:
@@ -60,6 +64,7 @@ jobs:
         echo "Device Name: ${{ github.event.inputs.DEVICE_NAME }}"
         echo "Makefile Name: ${{ github.event.inputs.MAKEFILE_NAME }}"
         echo "Build Target: ${{ github.event.inputs.BUILD_TARGET }}.img"
+        echo "Disable Crypto: ${{ github.event.inputs.DISABLE_CRYPTO }}"
         echo "::endgroup::"
 
     - name: Check Out
@@ -70,8 +75,7 @@ jobs:
 
     - name: Prepare the environment
       run: |
-        sudo apt update
-        sudo apt -y upgrade
+        sudo apt update && sudo apt -y upgrade
         sudo apt -y install gperf gcc-12 g++-12 g++-12-multilib gcc-12-multilib libc6-dev libncurses5-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev liblz4-tool libsdl1.2-dev libwxgtk3.2-dev libxml2 lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-12-dev python3
 
     - name: Install OpenJDK
@@ -115,9 +119,7 @@ jobs:
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Clone common tree
-      if: |
-        github.event.inputs.COMMON_TREE_URL != null
-        && github.event.inputs.COMMON_PATH != null
+      if: github.event.inputs.COMMON_TREE_URL != null && github.event.inputs.COMMON_PATH != null
       run: |
         git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
@@ -141,6 +143,16 @@ jobs:
       uses: pierotofy/set-swap-space@master
       with:
         swap-size-gb: 12
+
+    - name: Apply Crypto Flags if Needed
+      run: |
+        if [ "${{ github.event.inputs.DISABLE_CRYPTO }}" = "true" ]; then
+          echo 'TW_INCLUDE_CRYPTO := false' >> ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+          echo 'TW_INCLUDE_FBE := false' >> ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+          echo 'TW_INCLUDE_FBE_METADATA_DECRYPT := false' >> ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+          echo 'ro.hardware=tb375fc' >> ${{ github.event.inputs.DEVICE_PATH }}/system.prop
+        fi
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Building recovery
       run: |
