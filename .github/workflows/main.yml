@@ -122,6 +122,13 @@ jobs:
         echo 'ro.hardware=tb375fc' >> ${{ github.event.inputs.DEVICE_PATH }}/system.prop
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
+    - name: Verify Patches
+      run: |
+        echo '--- BoardConfig.mk (last 5 lines) ---'
+        tail -n 5 ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+        echo '--- system.prop (last 5 lines) ---'
+        tail -n 5 ${{ github.event.inputs.DEVICE_PATH }}/system.prop
+
     - name: Clone common tree
       if: |
         github.event.inputs.COMMON_TREE_URL != null
