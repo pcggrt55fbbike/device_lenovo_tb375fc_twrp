@@ -72,7 +72,12 @@ jobs:
       run: |
         sudo apt update
         sudo apt -y upgrade
-        sudo apt -y install gperf gcc-12 g++-12 g++-12-multilib gcc-12-multilib libc6-dev libncurses5-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev liblz4-tool libsdl1.2-dev libwxgtk3.2-dev libxml2 lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-12-dev python3
+        sudo apt -y install gperf gcc-12 g++-12 g++-12-multilib \
+        gcc-12-multilib libc6-dev libncurses5-dev libx11-dev tree \
+        lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache \
+        lib32readline-dev liblz4-tool libsdl1.2-dev libwxgtk3.2-dev \
+        lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev \
+        lzma ncftp qemu-user-static libstdc++-12-dev python3
 
     - name: Install OpenJDK
       uses: actions/setup-java@v3
@@ -84,12 +89,11 @@ jobs:
       if: ${{ startsWith(github.event.inputs.MANIFEST_URL, 'git@github.com') }}
       uses: webfactory/ssh-agent@v0.5.4
       with:
-        ssh-private-key: |
-          ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Install repo
       run: |
-        mkdir ~/bin
+        mkdir -p ~/bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
@@ -97,44 +101,49 @@ jobs:
     - name: Initialize repo
       id: pwd
       run: |
-        mkdir workspace
-        cd workspace
+        mkdir workspace && cd workspace
         echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
         git config --global user.name "YourUsername"
         git config --global user.email "you@example.com"
-        repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
+        repo init --depth=1 \
+          -u ${{ github.event.inputs.MANIFEST_URL }} \
+          -b ${{ github.event.inputs.MANIFEST_BRANCH }}
 
     - name: Repo Sync
-      run: |
-        repo sync -j$(nproc --all) --force-sync
+      run: repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
 
     - name: Clone device tree
       run: |
-        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
+        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} \
+          -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} \
+          ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Apply Crypto & Hardware Patches
       run: |
-        echo 'TW_INCLUDE_CRYPTO := false' >> ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
-        echo 'TW_INCLUDE_FBE := false' >> ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
-        echo 'TW_INCLUDE_FBE_METADATA_DECRYPT := false' >> ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
-        echo 'ro.hardware=tb375fc' >> ${{ github.event.inputs.DEVICE_PATH }}/system.prop
-      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+        echo 'TW_INCLUDE_CRYPTO := false' \
+          >> ${{ github.workspace }}/${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+        echo 'TW_INCLUDE_FBE := false' \
+          >> ${{ github.workspace }}/${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+        echo 'TW_INCLUDE_FBE_METADATA_DECRYPT := false' \
+          >> ${{ github.workspace }}/${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+        echo 'ro.hardware=tb375fc' \
+          >> ${{ github.workspace }}/${{ github.event.inputs.DEVICE_PATH }}/system.prop
 
     - name: Verify Patches
       run: |
         echo '--- BoardConfig.mk (last 5 lines) ---'
-        tail -n 5 ${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+        tail -n 5 ${{ github.workspace }}/${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
         echo '--- system.prop (last 5 lines) ---'
-        tail -n 5 ${{ github.event.inputs.DEVICE_PATH }}/system.prop
+        tail -n 5 ${{ github.workspace }}/${{ github.event.inputs.DEVICE_PATH }}/system.prop
 
     - name: Clone common tree
-      if: |
-        github.event.inputs.COMMON_TREE_URL != null
-        && github.event.inputs.COMMON_PATH != null
+      if: ${{ github.event.inputs.COMMON_TREE_URL != '' && github.event.inputs.COMMON_PATH != '' }}
       run: |
-        git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
+        git clone ${{ github.event.inputs.COMMON_TREE_URL }} \
+          -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} \
+          ./${{ github.event.inputs.COMMON_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Check Build Tree
@@ -147,7 +156,8 @@ jobs:
 
     - name: Sync Device Dependencies
       run: |
-        bash ${GITHUB_WORKSPACE}/scripts/convert.sh ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
+        bash ${GITHUB_WORKSPACE}/scripts/convert.sh \
+          ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
         repo sync -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
@@ -161,7 +171,9 @@ jobs:
       run: |
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
-        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && \
+          make clean && make ${{ github.event.inputs.BUILD_TARGET }}image \
+          -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Upload to Release
