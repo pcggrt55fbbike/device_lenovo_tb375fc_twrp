@@ -118,9 +118,14 @@ jobs:
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       run: |
         cd ${{ github.event.inputs.DEVICE_PATH }}
+        # BoardConfig.mk に空行を入れてから追記
+        echo '' >> BoardConfig.mk
         echo 'TW_INCLUDE_CRYPTO := false' >> BoardConfig.mk
         echo 'TW_INCLUDE_FBE := false' >> BoardConfig.mk
         echo 'TW_INCLUDE_FBE_METADATA_DECRYPT := false' >> BoardConfig.mk
+
+        # system.prop に空行を入れてから追記
+        echo '' >> system.prop
         echo 'ro.hardware=tb375fc' >> system.prop
 
     - name: Verify Patches
