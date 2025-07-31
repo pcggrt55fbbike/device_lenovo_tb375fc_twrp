@@ -65,3 +65,7 @@ on boot
     start health-hal-2-1
     start overrideprops
     setprop sys.usb.config adb
+
+on property:vold.decrypt=trigger_post_fs_data
+    restart keystore2
+    trigger post-fs-data
