@@ -1,9 +1,0 @@
-ro.hardware=mt6897
-ro.boot.hardware=mt6897
-ro.product.device=TB375FC
-ro.product.name=TB375FC
-ro.product.model=TB375FC
-ro.vendor.mediatek.platform=MT6897
-
-ro.sys.usb.storage.type=mtp
-ro.crypto.volume.filenames_mode=aes-256-cts
