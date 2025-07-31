@@ -5,7 +5,5 @@ ro.product.name=TB375FC
 ro.product.model=TB375FC
 ro.vendor.mediatek.platform=MT6897
 
-# 一般設定（任意で追加）
-persist.sys.timezone=Asia/Tokyo
 ro.sys.usb.storage.type=mtp
 ro.crypto.volume.filenames_mode=aes-256-cts
