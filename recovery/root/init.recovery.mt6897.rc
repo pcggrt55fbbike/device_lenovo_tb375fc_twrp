@@ -1,5 +1,6 @@
 import /init.recovery.project.rc
 import /system/etc/keystore2.rc
+
 on init
     setprop sys.usb.configfs 1
     setprop sys.usb.controller "11201000.usb0"
@@ -18,7 +19,8 @@ on late-fs
 
 on post-fs
     start boot-hal-1-2
-    
+    start prepdecrypt
+
     # Support A/B feature for EMMC and UFS boot region
     wait /dev/block/mmcblk0boot0 2
     symlink /dev/block/sda /dev/block/mmcblk0boot0
@@ -39,7 +41,6 @@ on post-fs
     symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
 
     # to access F2FS sysfs on dm-<num> directly
-    
     symlink /sys/fs/f2fs/${dev.mnt.dev.data} /dev/sys/fs/by-name/userdata
 
     symlink /dev/block/platform/bootdevice /dev/block/bootdevice
@@ -54,14 +55,19 @@ service mtk.plpath.utils.link /system/bin/mtk_plpath_utils
     disabled
     oneshot
     seclabel u:r:recovery:s0
-    
- service overrideprops /system/bin/overrideprops.sh
+
+service overrideprops /system/bin/overrideprops.sh
     user root
     group root
     disabled
     oneshot
     seclabel u:r:recovery:s0
-    
+
+service prepdecrypt /sbin/prepdecrypt.sh
+    class main
+    user root
+    oneshot
+
 on boot
     start health-hal-2-1
     start overrideprops
