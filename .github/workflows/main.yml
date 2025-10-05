@@ -114,6 +114,10 @@ jobs:
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
+    - name: Make prepdecrypt.sh executable
+      run: chmod +x ${{ github.event.inputs.DEVICE_PATH }}/recovery/root/sbin/prepdecrypt.sh
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
     - name: Clone common tree
       if: |
         github.event.inputs.COMMON_TREE_URL != null
