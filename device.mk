@@ -118,7 +118,10 @@ PRODUCT_PACKAGES += \
 
 # Drm
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.4    
+    android.hardware.drm@1.4
+
+PRODUCT_PACKAGES += \
+    mtk_fbe_decrypt
 
 # Additional Target Libraries
 TARGET_RECOVERY_DEVICE_MODULES += \
