@@ -3,21 +3,30 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <cctype>
+#include <cstdlib>
 #include "crypto.hpp"
 
 /**
- * hex文字列 → バイト列変換
+ * hex文字列 → バイト列変換（例外なし）
  */
 std::vector<uint8_t> hex_to_bytes(const std::string& hex) {
     std::vector<uint8_t> bytes;
-    try {
-        for (size_t i = 0; i < hex.length(); i += 2) {
-            uint8_t byte = std::stoi(hex.substr(i, 2), nullptr, 16);
-            bytes.push_back(byte);
-        }
-    } catch (...) {
-        std::cerr << "Invalid hex input: " << hex << std::endl;
+    if (hex.length() % 2 != 0) {
+        std::cerr << "Invalid hex length: " << hex << std::endl;
         return {};
+    }
+
+    for (size_t i = 0; i < hex.length(); i += 2) {
+        char high = hex[i];
+        char low = hex[i + 1];
+        if (!std::isxdigit(high) || !std::isxdigit(low)) {
+            std::cerr << "Invalid hex digit: " << high << low << std::endl;
+            return {};
+        }
+
+        uint8_t byte = static_cast<uint8_t>(std::strtol(hex.substr(i, 2).c_str(), nullptr, 16));
+        bytes.push_back(byte);
     }
     return bytes;
 }
