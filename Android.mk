@@ -9,4 +9,7 @@ LOCAL_PATH := $(call my-dir)
 
 ifeq ($(TARGET_DEVICE),tb375fc)
 include $(call all-subdir-makefiles,$(LOCAL_PATH))
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery/root/system/etc/vintf/manifest.xml:system/etc/vintf/manifest.xml
 endif
