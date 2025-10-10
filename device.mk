@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-LOCAL_PATH := device/lenovo/tb375fc
+LOCAL_PATH := device/lenovo/tb373fu
 
 # Hidl Service
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
