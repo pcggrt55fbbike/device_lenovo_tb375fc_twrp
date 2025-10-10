@@ -1,5 +1,5 @@
 # Device Path
-DEVICE_PATH := device/lenovo/tb375fc
+DEVICE_PATH := device/lenovo/tb373fu
 
 # Build Flags
 ALLOW_MISSING_DEPENDENCIES := true
@@ -25,7 +25,7 @@ ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := tb375fc
+TARGET_OTA_ASSERT_DEVICE := tb373fu
 
 # Platform
 PRODUCT_PLATFORM := mt6897
@@ -149,7 +149,7 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := libinit_tb375fc
+TARGET_INIT_VENDOR_LIB := libinit_tb373fu
 
 # Treble
 BOARD_VNDK_VERSION := current
