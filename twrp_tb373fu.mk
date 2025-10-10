@@ -12,8 +12,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 # Inherit some common Omni stuff.
 $(call inherit-product, vendor/twrp/config/common.mk)
 
-# Inherit from tb375fc device
-$(call inherit-product, device/lenovo/tb375fc/device.mk)
+# Inherit from tb373fu device
+$(call inherit-product, device/lenovo/tb373fu/device.mk)
 
 # Configure launch_with_vendor_ramdisk.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
@@ -21,10 +21,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 # Configure emulated_storage.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-PRODUCT_DEVICE := tb375fc
-PRODUCT_NAME := twrp_tb375fc
+PRODUCT_DEVICE := tb373fu
+PRODUCT_NAME := twrp_tb373fu
 PRODUCT_BRAND := Lenovo
-PRODUCT_MODEL := TB375FC
+PRODUCT_MODEL := TB373FU
 PRODUCT_MANUFACTURER := Lenovo
 
 # Hide Reflash TWRP & FUSE passthrough
