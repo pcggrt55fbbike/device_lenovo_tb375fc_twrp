@@ -7,7 +7,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),tb375fc)
+ifeq ($(TARGET_DEVICE),tb373fu)
 include $(call all-subdir-makefiles,$(LOCAL_PATH))
 
 PRODUCT_COPY_FILES += \
