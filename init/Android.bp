@@ -1,5 +1,5 @@
 cc_library_static {
-    name: "libinit_tb375fc",
+    name: "libinit_tb373fu",
     header_libs: [
         "libbase_headers",
     ],
@@ -9,6 +9,6 @@ cc_library_static {
     static_libs: [
         "libbase",
     ],
-    srcs: ["init_tb375fc.cpp"],
+    srcs: ["init_tb373fu.cpp"],
     recovery_available: true,
 }
