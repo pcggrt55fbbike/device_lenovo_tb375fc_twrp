@@ -6,7 +6,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/twrp_tb375fc.mk
+    $(LOCAL_DIR)/twrp_tb373fu.mk
 
 COMMON_LUNCH_CHOICES := \
-    twrp_tb375fc-eng
+    twrp_tb373fu-eng
