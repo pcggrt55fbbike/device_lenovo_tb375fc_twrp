@@ -100,7 +100,7 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 TARGET_COPY_OUT_ODM_DLKM := odm_dlkm
 
 # Decrypt対応バイナリ（gatekeeperd / keystore2 / init/ mtk_fbe_decrypt）
-TARGET_RECOVERY_DEVICE_MODULES := gatekeeperd keystore2 libinit_tb375fc mtk_fbe_decrypt
+TARGET_RECOVERY_DEVICE_MODULES := gatekeeperd keystore2 libinit_tb373fu mtk_fbe_decrypt
 
 # FBE decrypt構成
 TW_INCLUDE_CRYPTO := true
