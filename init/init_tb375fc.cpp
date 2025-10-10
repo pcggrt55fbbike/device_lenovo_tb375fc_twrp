@@ -26,11 +26,11 @@ void vendor_load_properties()
     {
         property_override(string("ro.product.") + prop + string("brand"), "lenovo");
         property_override(string("ro.product.") + prop + string("manufacturer"), "lenovo");
-        property_override(string("ro.product.") + prop + string("name"), "tb375fc");
-        property_override(string("ro.product.") + prop + string("device"), "tb375fc");
-        property_override(string("ro.product.") + prop + string("model"), "tb375fc");
+        property_override(string("ro.product.") + prop + string("name"), "tb373fu");
+        property_override(string("ro.product.") + prop + string("device"), "tb373fu");
+        property_override(string("ro.product.") + prop + string("model"), "tb373fu");
         property_override(string("ro.product.") + prop + string("marketname"), "Lenovo xiaoxinpad 12.7 2025");
-        property_override(string("ro.product.") + prop + string("cert"), "tb375fc");
+        property_override(string("ro.product.") + prop + string("cert"), "tb373fu");
     }
     property_override("ro.bootimage.build.date.utc", "1676018595");
     property_override("ro.build.date.utc", "1676018595");
