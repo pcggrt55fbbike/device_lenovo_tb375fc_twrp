@@ -14,7 +14,7 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: false
-        default: 'https://github.com/pcggrt55fbbike/device_lenovo_tb375fc_twrp'
+        default: 'https://github.com/pcggrt55fbbike/device_lenovo_tb373fu_twrp'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: false
@@ -22,7 +22,7 @@ on:
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: false
-        default: 'device/lenovo/tb375fc'
+        default: 'device/lenovo/tb373fu'
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL'
         required: false
@@ -32,11 +32,11 @@ on:
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: false
-        default: 'tb375fc'
+        default: 'tb373fu'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: false
-        default: 'twrp_tb375fc'
+        default: 'twrp_tb373fu'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
         required: false
