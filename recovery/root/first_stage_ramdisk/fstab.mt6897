@@ -35,8 +35,7 @@ system_dlkm /system_dlkm erofs ro wait,slotselect,avb,logical,first_stage_mount
 system_dlkm /system_dlkm ext4 ro wait,slotselect,avb,logical,first_stage_mount
 
 
-/dev/block/dm-userdata /data f2fs noatime,nosuid,nodev,discard,noflush_merge,fsync_mode=nobarrier,reserve_root=134217,resgid=1065,inlinecrypt wait,check,formattable,quota,latemount,resize,reservedsize=128m,checkpoint=fs,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,keydirectory=/metadata/vold/metadata_encryption,fsverity
-
+/data f2fs dev=/dev/block/by-name/userdata,forcefdeorfbe,keydirectory=/metadata/vold/metadata_encryption,latemount,wait,check,quota,reservedsize=128m,checkpoint=fs,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,fsverity
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev wait,check
 
 
